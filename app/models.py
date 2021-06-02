@@ -32,7 +32,7 @@ class State(Base):
 
 class Address(Base):
 
-    __tablename__ = "address"
+    __tablename__ = "addresses"
 
 
     id = Column(Integer, primary_key=True, index=True)
@@ -41,4 +41,4 @@ class Address(Base):
     road_number = Column(Integer, index=True)
     state_id = Column(Integer, ForeignKey("states.id"))
 
-    state = relationship("State", back_populates="address")
+    state = relationship("State", back_populates="addresses")
