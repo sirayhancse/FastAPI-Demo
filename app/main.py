@@ -2,8 +2,9 @@
 from fastapi import FastAPI
 
 #local packages
-from app import routers
+from app import routers, database, models
 
+models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
