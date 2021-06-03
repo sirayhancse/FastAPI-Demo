@@ -52,3 +52,15 @@ class Countries():
                     )).offset(skip).limit(limit).all()
         else:
             return self.db.query(models.Country).offset(skip).limit(limit).all()
+
+    def get_states_by_country(self, country_id, state_name, skip, limit):
+
+        if state_name:
+            return self.db.query(models.State).filter(
+                models.State.country_id == country_id,
+                models.State.name.ilike(str(state_name))
+            ).offset(skip).limit(limit).all()
+        else:
+            return self.db.query(models.State).filter(
+                models.State.country_id == country_id
+            ).offset(skip).limit(limit).all()
