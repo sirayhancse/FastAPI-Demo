@@ -1,5 +1,6 @@
 from re import L
 from fastapi import FastAPI, Depends, Query
+from fastapi.param_functions import Path
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.orm import Session
@@ -29,7 +30,9 @@ class Countries():
                           country_code: Optional[str] = Query(
                               "", alias="country-code"),
                           skip: Optional[str] = Query(0, alias="skip"),
-                          limit: Optional[str] = Query(10, alias="limit")):
+                          limit: Optional[str] = Query(10, alias="limit")
+                          ):
+
         service_countries = CountriesService()
 
         return service_countries.get_countries(db=self.db,
@@ -38,6 +41,23 @@ class Countries():
                                                skip=skip,
                                                limit=limit
                                                )
+
+    @router.get("/{country_id}/states", response_model=List[schemas.State])
+    def get_states_by_country(self, country_id: int,
+                              state_name: Optional[str] = Query(
+                                  "", alias="state-name"),
+                              skip: Optional[str] = Query(0, alias="skip"),
+                              limit: Optional[str] = Query(10, alias="limit")
+                              ):
+
+        service_countries = CountriesService()
+
+        return service_countries.get_states_by_country(db=self.db,
+                                                       country_id=country_id,
+                                                       state_name=state_name,
+                                                       skip=skip,
+                                                       limit=limit
+                                                       )
 
 
 app.include_router(router)
