@@ -51,3 +51,20 @@ class Countries():
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No states found")
+
+    def get_addresses_by_state(self, db, state_id, house_number, road_number, skip, limit):
+        db_countries = CountriesCrud(db=db)
+
+        address_list = db_countries.get_addresses_by_state(
+            state_id=state_id,
+            house_number=house_number,
+            road_number=road_number,
+            skip=skip,
+            limit=limit
+        )
+
+        if address_list:
+            return address_list
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="No address found")
