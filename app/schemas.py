@@ -41,11 +41,14 @@ class Country(CountryBase):
         orm_mode = True
 
 
-class CreateCountry(CountryBase):
-    states: List[StateBase]
+class StateAdress(StateBase):
     addresses: List[AddressBase]
 
 
-class AddressDetails(Address):
-    state: State
-    country: Country
+class CreateCountry(CountryBase):
+    states: List[StateAdress]
+
+
+# class AddressDetails(Address):
+#     state: State
+#     country: Country
