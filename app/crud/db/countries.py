@@ -64,3 +64,24 @@ class Countries():
             return self.db.query(models.State).filter(
                 models.State.country_id == country_id
             ).offset(skip).limit(limit).all()
+
+    def get_addresses_by_state(self, state_id, house_number, road_number, skip, limit):
+
+        if house_number and road_number:
+            return self.db.query(models.Address).filter(
+                models.Address.state_id == state_id,
+                models.Address.house_number.ilike(str(house_number)),
+                models.Address.road_number == road_number
+            ).offset(skip).limit(limit).all()
+
+        elif house_number or road_number:
+            return self.db.query(models.Address).filter(
+                models.Address.state_id == state_id,
+                or_(models.Address.house_number.ilike(str(house_number)),
+                    models.Address.road_number == road_number)
+            ).offset(skip).limit(limit).all()
+
+        else:
+            return self.db.query(models.Address).filter(
+                models.Address.state_id == state_id
+            ).offset(skip).limit(limit).all()
