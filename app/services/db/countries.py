@@ -35,3 +35,19 @@ class Countries():
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No country found")
+
+    def get_states_by_country(self, db, country_id, state_name, skip, limit):
+        db_countries = CountriesCrud(db=db)
+
+        state_list = db_countries.get_states_by_country(
+            country_id=country_id,
+            state_name=state_name,
+            skip=skip,
+            limit=limit
+        )
+
+        if state_list:
+            return state_list
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="No states found")
