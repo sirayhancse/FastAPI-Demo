@@ -59,5 +59,25 @@ class Countries():
                                                        limit=limit
                                                        )
 
+    @router.get("/states/{state_id}/addresses", response_model=List[schemas.Address])
+    def get_addresses_by_state(self, state_id: int,
+                              house_number: Optional[str] = Query(
+                                  "", alias="house-name"),
+                              road_number: Optional[str] = Query(
+                                  None, alias="road-number"),
+                              skip: Optional[str] = Query(0, alias="skip"),
+                              limit: Optional[str] = Query(10, alias="limit")
+                              ):
+
+        service_countries = CountriesService()
+
+        return service_countries.get_addresses_by_state(db=self.db,
+                                                        state_id=state_id,
+                                                        house_number=house_number,
+                                                        road_number=road_number,
+                                                        skip=skip,
+                                                        limit=limit
+                                                        )
+
 
 app.include_router(router)
