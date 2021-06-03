@@ -16,6 +16,8 @@ class Country(Base):
     longitude = Column(Float, index=True)
     code = Column(String, index=True)
 
+    states = relationship("State", back_populates="country")
+
 
 class State(Base):
 
@@ -27,6 +29,8 @@ class State(Base):
     country_id = Column(Integer, ForeignKey("countries.id"))
 
     country = relationship("Country", back_populates="states")
+
+    addresses = relationship("Address", back_populates="state")
 
 
 
