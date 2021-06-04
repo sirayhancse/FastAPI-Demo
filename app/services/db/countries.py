@@ -1,6 +1,8 @@
 from fastapi import HTTPException, status
 from typing import Optional
 
+from fastapi.encoders import jsonable_encoder
+
 from ... import schemas
 from app.crud.db.countries import Countries as CountriesCrud
 
@@ -65,6 +67,26 @@ class Countries():
 
         if address_list:
             return address_list
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="No address found")
+
+    def get_addresses_details(self, db, address_name):
+        db_countries = CountriesCrud(db=db)
+
+        address_details = db_countries.get_address_details(
+            address_name=address_name
+        )
+
+        if address_details:
+            return {
+                "id": address_details.Address.id,
+                "name": address_details.Address.name,
+                "house_number": address_details.Address.house_number,
+                "road_number": address_details.Address.road_number,
+                "state": address_details.State,
+                "country": address_details.Country
+            }
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No address found")
