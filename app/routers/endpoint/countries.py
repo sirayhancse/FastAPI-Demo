@@ -61,13 +61,13 @@ class Countries():
 
     @router.get("/states/{state_id}/addresses", response_model=List[schemas.Address])
     def get_addresses_by_state(self, state_id: int,
-                              house_number: Optional[str] = Query(
-                                  "", alias="house-name"),
-                              road_number: Optional[str] = Query(
-                                  None, alias="road-number"),
-                              skip: Optional[str] = Query(0, alias="skip"),
-                              limit: Optional[str] = Query(10, alias="limit")
-                              ):
+                               house_number: Optional[str] = Query(
+                                   "", alias="house-name"),
+                               road_number: Optional[str] = Query(
+                                   None, alias="road-number"),
+                               skip: Optional[str] = Query(0, alias="skip"),
+                               limit: Optional[str] = Query(10, alias="limit")
+                               ):
 
         service_countries = CountriesService()
 
@@ -78,6 +78,12 @@ class Countries():
                                                         skip=skip,
                                                         limit=limit
                                                         )
+
+    @router.get("/states/address", response_model=schemas.AddressDetails)
+    def get_address_details(self, address_name: str):
+        service_countries = CountriesService()
+
+        return service_countries.get_addresses_details(db=self.db, address_name=address_name)
 
 
 app.include_router(router)
