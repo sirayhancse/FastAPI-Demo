@@ -26,12 +26,18 @@ class StateBase(BaseModel):
 class State(StateBase):
     id: int
 
+    class Config:
+        orm_mode = True
+
 
 class CountryBase(BaseModel):
     name: str
     latitude: float
     longitude: float
     code: str
+
+    class Config:
+        orm_mode = True
 
 
 class Country(CountryBase):
@@ -49,6 +55,6 @@ class CreateCountry(CountryBase):
     states: List[StateAdress]
 
 
-# class AddressDetails(Address):
-#     state: State
-#     country: Country
+class AddressDetails(Address):
+    state: StateBase
+    country: CountryBase
