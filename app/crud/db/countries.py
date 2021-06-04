@@ -85,3 +85,12 @@ class Countries():
             return self.db.query(models.Address).filter(
                 models.Address.state_id == state_id
             ).offset(skip).limit(limit).all()
+
+    def get_address_details(self, address_name):
+        return self.db.query(models.Address, models.State, models.Country).filter(
+            models.Country.id == models.State.country_id
+        ).filter(
+            models.State.id == models.Address.state_id
+        ).filter(
+            models.Address.name.ilike(str(address_name))
+        ).first()
