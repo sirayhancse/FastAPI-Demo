@@ -1,0 +1,15 @@
+{
+    "name": "Shantinagar",
+    "house_number": "37/1",
+    "road_number": 3,
+    "id": 1,
+    "state": {
+        "name": "Dhaka"
+    },
+    "country": {
+        "name": "Bangladesh",
+        "latitude": 123.3,
+        "longitude": 30.3,
+        "code": "BD"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "country": [
+        {
+            "name": "Bangladesh",
+            "latitude": 123.3,
+            "longitude": 30.3,
+            "code": "BD",
+            "id": 1
+        }
+    ],
+    "states": [
+        {
+            "name": "Dhaka",
+            "id": 1
+        }
+    ],
+    "addresses": [
+        {
+            "name": "Shantinagar",
+            "house_number": "37/1",
+            "road_number": 3,
+            "id": 1
+        }
+    ]
+}
