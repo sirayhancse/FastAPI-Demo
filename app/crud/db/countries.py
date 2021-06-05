@@ -94,3 +94,8 @@ class Countries():
         ).filter(
             models.Address.name.ilike(str(address_name))
         ).first()
+
+    def is_country_exist(self, country_name):
+        return bool(self.db.query(models.Country).filter(
+            models.Country.name == country_name
+        ).first())
