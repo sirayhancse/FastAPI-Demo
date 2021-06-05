@@ -11,7 +11,7 @@ class Country(Base):
 
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    name = Column(String, index=True, unique=True)
     latitude = Column(Float, index=True)
     longitude = Column(Float, index=True)
     code = Column(String, index=True)
