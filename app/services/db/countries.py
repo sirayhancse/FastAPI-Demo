@@ -11,16 +11,19 @@ class Countries():
 
     def create_country(self, db, country: schemas.CreateCountry):
         db_countries = CountriesCrud(db=db)
-
-        country_obj = db_countries.create_country(country=country)
-
-        if country_obj:
-            db.commit()
-            raise HTTPException(status_code=status.HTTP_201_CREATED,
-                                detail="Country created successfully")
+        is_exist = db_countries.is_country_exist(country.name)
+        if not is_exist:
+            country_obj = db_countries.create_country(country=country)
+            if country_obj:
+                db.commit()
+                raise HTTPException(status_code=status.HTTP_201_CREATED,
+                                    detail="Country created successfully")
+            else:
+                raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                                    detail="Country created failed")
         else:
-            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                                detail="Country created failed")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Country already exists")
 
     def get_countries(self, db, country_name, country_code, skip, limit):
         db_countries = CountriesCrud(db=db)
