@@ -24,7 +24,7 @@ class Countries():
                 raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                                     detail="Country created failed")
         else:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                                 detail="Country already exists")
 
     def get_countries(self, db, user_id: int, country_name: str,
