@@ -1,5 +1,5 @@
 from app.models import Address
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -58,3 +58,44 @@ class CreateCountry(CountryBase):
 class AddressDetails(Address):
     state: StateBase
     country: CountryBase
+
+
+class UserBase(BaseModel):
+    email: str
+
+
+class User(UserBase):
+    id: int
+    is_active: bool
+
+    class Config:
+        orm_mode = True
+
+
+class BaseRequest(BaseModel):
+    pass
+
+
+class UserRegisterRequest(BaseRequest, UserBase):
+    password: str
+
+
+class UserLoginRequest(BaseRequest, UserBase):
+    password: str
+
+
+class BaseResponse(BaseModel):
+    success: bool
+
+
+class UserResponse(BaseResponse):
+    user: User
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
