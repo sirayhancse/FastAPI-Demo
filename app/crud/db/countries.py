@@ -10,11 +10,12 @@ class Countries():
     def __init__(self, db) -> None:
         self.db: Session = db
 
-    def create_country(self, country: schemas.CreateCountry):
+    def create_country(self, user_id: int, country: schemas.CreateCountry):
         country_obj = models.Country(name=country.name,
                                      latitude=country.latitude,
                                      longitude=country.longitude,
-                                     code=country.code
+                                     code=country.code,
+                                     owner_id=user_id
                                      )
         self.db.add(country_obj)
         self.db.flush()
@@ -95,7 +96,8 @@ class Countries():
             models.Address.name.ilike(str(address_name))
         ).first()
 
-    def is_country_exist(self, country_name):
+    def is_country_exist(self, user_id: int, country_name: str):
         return bool(self.db.query(models.Country).filter(
+            models.Country.owner_id == user_id,
             models.Country.name == country_name
         ).first())
