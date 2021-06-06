@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 
 from ...utils import get_db
-from app import schemas
+from app import schemas, auth
 from app.services.db.countries import Countries as CountriesService
 
 
@@ -20,10 +20,11 @@ class Countries():
     db: Session = Depends(get_db)
 
     @router.post("/")
-    def create_country(self, country: schemas.CreateCountry):
+    def create_country(self, country: schemas.CreateCountry,
+                       current_user: schemas.User = Depends(auth.get_current_active_user)):
         service_countries = CountriesService()
 
-        return service_countries.create_country(db=self.db, country=country)
+        return service_countries.create_country(db=self.db, user_id=current_user.id, country=country)
 
     @router.get("/", response_model=List[schemas.Country])
     def get_all_countries(self, country_name: Optional[str] = Query("", alias="country-name"),
