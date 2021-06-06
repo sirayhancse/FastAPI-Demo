@@ -9,11 +9,13 @@ from app.crud.db.countries import Countries as CountriesCrud
 
 class Countries():
 
-    def create_country(self, db, country: schemas.CreateCountry):
+    def create_country(self, db, user_id: int, country: schemas.CreateCountry):
         db_countries = CountriesCrud(db=db)
-        is_exist = db_countries.is_country_exist(country.name)
+        is_exist = db_countries.is_country_exist(
+            user_id=user_id, country_name=country.name)
         if not is_exist:
-            country_obj = db_countries.create_country(country=country)
+            country_obj = db_countries.create_country(
+                user_id=user_id, country=country)
             if country_obj:
                 db.commit()
                 raise HTTPException(status_code=status.HTTP_201_CREATED,
