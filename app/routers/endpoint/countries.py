@@ -31,12 +31,15 @@ class Countries():
                           country_code: Optional[str] = Query(
                               "", alias="country-code"),
                           skip: Optional[str] = Query(0, alias="skip"),
-                          limit: Optional[str] = Query(10, alias="limit")
+                          limit: Optional[str] = Query(10, alias="limit"),
+                          current_user: schemas.User = Depends(
+                              auth.get_current_active_user)
                           ):
 
         service_countries = CountriesService()
 
         return service_countries.get_countries(db=self.db,
+                                               user_id=current_user.id,
                                                country_name=country_name,
                                                country_code=country_code,
                                                skip=skip,
@@ -48,12 +51,15 @@ class Countries():
                               state_name: Optional[str] = Query(
                                   "", alias="state-name"),
                               skip: Optional[str] = Query(0, alias="skip"),
-                              limit: Optional[str] = Query(10, alias="limit")
+                              limit: Optional[str] = Query(10, alias="limit"),
+                              current_user: schemas.User = Depends(
+                                  auth.get_current_active_user)
                               ):
 
         service_countries = CountriesService()
 
         return service_countries.get_states_by_country(db=self.db,
+                                                       user_id=current_user.id,
                                                        country_id=country_id,
                                                        state_name=state_name,
                                                        skip=skip,
@@ -67,12 +73,15 @@ class Countries():
                                road_number: Optional[str] = Query(
                                    None, alias="road-number"),
                                skip: Optional[str] = Query(0, alias="skip"),
-                               limit: Optional[str] = Query(10, alias="limit")
+                               limit: Optional[str] = Query(10, alias="limit"),
+                               current_user: schemas.User = Depends(
+                                   auth.get_current_active_user)
                                ):
 
         service_countries = CountriesService()
 
         return service_countries.get_addresses_by_state(db=self.db,
+                                                        user_id=current_user.id,
                                                         state_id=state_id,
                                                         house_number=house_number,
                                                         road_number=road_number,
@@ -81,10 +90,12 @@ class Countries():
                                                         )
 
     @router.get("/states/address", response_model=schemas.AddressDetails)
-    def get_address_details(self, address_name: str):
+    def get_address_details(self, address_name: str,
+                            current_user: schemas.User = Depends(auth.get_current_active_user)):
         service_countries = CountriesService()
 
-        return service_countries.get_addresses_details(db=self.db, address_name=address_name)
+        return service_countries.get_addresses_details(db=self.db, user_id=current_user.id,
+                                                       address_name=address_name)
 
 
 app.include_router(router)
