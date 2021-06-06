@@ -1,6 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
+from sqlalchemy.sql.functions import mode
 
 from app import models, schemas
 
@@ -38,38 +39,49 @@ class Countries():
 
         return country_obj
 
-    def get_countries(self, country_name, country_code, skip, limit):
+    def get_countries(self, user_id: int, country_name: str, country_code: str, skip: int, limit: int):
 
         if country_name and country_code:
             return self.db.query(models.Country).filter(
+                models.Country.owner_id == user_id,
                 and_(models.Country.name.ilike(str(country_name)),
                      models.Country.code.ilike(str(country_code))
                      )).offset(skip).limit(limit).all()
 
         elif country_name or country_code:
             return self.db.query(models.Country).filter(
+                models.Country.owner_id == user_id,
                 or_(models.Country.name.ilike(str(country_name)),
                     models.Country.code.ilike(str(country_code))
                     )).offset(skip).limit(limit).all()
         else:
-            return self.db.query(models.Country).offset(skip).limit(limit).all()
+            return self.db.query(models.Country).filter(
+                models.Country.owner_id == user_id).offset(skip).limit(limit).all()
 
-    def get_states_by_country(self, country_id, state_name, skip, limit):
+    def get_states_by_country(self, user_id: int, country_id: int,
+                              state_name: str, skip: int, limit: int):
 
         if state_name:
             return self.db.query(models.State).filter(
+                models.Country.owner_id == user_id
+            ).filter(
                 models.State.country_id == country_id,
                 models.State.name.ilike(str(state_name))
             ).offset(skip).limit(limit).all()
         else:
             return self.db.query(models.State).filter(
+                models.Country.owner_id == user_id
+            ).filter(
                 models.State.country_id == country_id
             ).offset(skip).limit(limit).all()
 
-    def get_addresses_by_state(self, state_id, house_number, road_number, skip, limit):
+    def get_addresses_by_state(self, user_id: int, state_id: int, house_number: str,
+                               road_number: str, skip: int, limit: int):
 
         if house_number and road_number:
             return self.db.query(models.Address).filter(
+                models.Country.owner_id == user_id
+            ).filter(
                 models.Address.state_id == state_id,
                 models.Address.house_number.ilike(str(house_number)),
                 models.Address.road_number == road_number
@@ -77,6 +89,8 @@ class Countries():
 
         elif house_number or road_number:
             return self.db.query(models.Address).filter(
+                models.Country.owner_id == user_id
+            ).filter(
                 models.Address.state_id == state_id,
                 or_(models.Address.house_number.ilike(str(house_number)),
                     models.Address.road_number == road_number)
@@ -84,11 +98,15 @@ class Countries():
 
         else:
             return self.db.query(models.Address).filter(
+                models.Country.owner_id == user_id
+            ).filter(
                 models.Address.state_id == state_id
             ).offset(skip).limit(limit).all()
 
-    def get_address_details(self, address_name):
+    def get_address_details(self, user_id: int, address_name: str):
         return self.db.query(models.Address, models.State, models.Country).filter(
+            models.Country.owner_id == user_id
+        ).filter(
             models.Country.id == models.State.country_id
         ).filter(
             models.State.id == models.Address.state_id
