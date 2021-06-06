@@ -21,7 +21,6 @@ class Users():
         """
         Get details of authenticated user
         """
-        print(user)
         return {
             "success": True,
             "user": user
