@@ -27,10 +27,12 @@ class Countries():
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="Country already exists")
 
-    def get_countries(self, db, country_name, country_code, skip, limit):
+    def get_countries(self, db, user_id: int, country_name: str,
+                      country_code: str, skip: int, limit: int):
         db_countries = CountriesCrud(db=db)
 
         country_list = db_countries.get_countries(
+            user_id=user_id,
             country_name=country_name,
             country_code=country_code,
             skip=skip,
@@ -43,10 +45,12 @@ class Countries():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No country found")
 
-    def get_states_by_country(self, db, country_id, state_name, skip, limit):
+    def get_states_by_country(self, db, user_id: int, country_id: int,
+                              state_name: str, skip: int, limit: int):
         db_countries = CountriesCrud(db=db)
 
         state_list = db_countries.get_states_by_country(
+            user_id=user_id,
             country_id=country_id,
             state_name=state_name,
             skip=skip,
@@ -59,10 +63,12 @@ class Countries():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No states found")
 
-    def get_addresses_by_state(self, db, state_id, house_number, road_number, skip, limit):
+    def get_addresses_by_state(self, db, user_id: int, state_id: int,
+                               house_number: str, road_number: str, skip: int, limit: int):
         db_countries = CountriesCrud(db=db)
 
         address_list = db_countries.get_addresses_by_state(
+            user_id=user_id,
             state_id=state_id,
             house_number=house_number,
             road_number=road_number,
@@ -76,10 +82,11 @@ class Countries():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="No address found")
 
-    def get_addresses_details(self, db, address_name):
+    def get_addresses_details(self, db, user_id: int, address_name: str):
         db_countries = CountriesCrud(db=db)
 
         address_details = db_countries.get_address_details(
+            user_id=user_id,
             address_name=address_name
         )
 
