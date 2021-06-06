@@ -72,5 +72,4 @@ async def get_current_active_user(current_user: schemas.User = Depends(get_curre
     if not current_user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
-    # print(current_user)
     return current_user
