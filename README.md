@@ -65,7 +65,7 @@ Follow this steps and run command on your terminal:
 # run pytest suit
 $ pytest
 ```
-If you want to change dummy users or country data , you need to chane respective response data also.
+If you want to change dummy users or country data , you need to change respective response data also.
 ## License
 
 MIT
