@@ -18,8 +18,8 @@ fake_email = "a@a.com"
 fake_password = "12345"
 
 
-def pytest_namespace():
-    return {"access_token": ""}
+def pytest_configure():
+    return pytest.access_token
 
 
 def test_user_registration():
